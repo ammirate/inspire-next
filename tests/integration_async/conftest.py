@@ -90,7 +90,6 @@ def clear_environment(super_app):
         init_users_and_permissions()
 
 
-
 @pytest.fixture
 def create_records(super_app):
 

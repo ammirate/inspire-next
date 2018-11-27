@@ -24,7 +24,8 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
-from inspirehep.modules.records.cli import check
+from inspirehep.modules.records.api import RecordMetadata
+from inspirehep.modules.records.cli import check, get_query_records_to_index
 
 
 def test_check_unlinked_references_generate_files(app_cli_runner, isolated_app, tmpdir):

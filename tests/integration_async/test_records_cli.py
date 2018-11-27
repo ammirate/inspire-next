@@ -23,12 +23,15 @@
 from __future__ import absolute_import, division, print_function
 
 import json
+import os
 
 import pytest
 
 from mock import patch
 
+from inspirehep.modules.records.api import RecordMetadata
 from inspirehep.modules.records.cli import (
+    get_query_records_to_index,
     simpleindex,
 )
 
@@ -86,21 +89,27 @@ def test_simpleindex_does_fails_invalid_record(
     celery_app_with_context,
     celery_session_worker,
     create_records,
+    tmpdir,
 ):
-    """This test should fail because record has a non valid field"""
+    log_path = str(tmpdir)
+    broken_field = {
+        '_desy_bookkeeping': {
+            'date': '"2013-01-14_final'
+        }
+    }
     with patch('inspirehep.modules.records.receivers.InspireRecordIndexer'):
-        create_records(additional_props={'_desy_bookkeeping': {'date': '"2013-01-14_final'}})
+        create_records(additional_props=broken_field)
 
     result = super_app_cli.invoke(
         simpleindex,
-        ['--yes-i-know', '-t', 'lit', '--queue-name', ''],
+        ['--yes-i-know', '-t', 'lit', '--queue-name', '', '-l', log_path],
     )
     assert result.exit_code == 0
     assert '0 succeeded' in result.output_bytes
     assert '1 failed' in result.output_bytes
     assert '0 batches errored' in result.output_bytes
 
-    with open('/tmp/inspire/records_index_failures.log') as log_file:
+    with open(os.path.join(log_path, 'records_index_failures.log')) as log_file:
         content = json.loads(log_file.read())
         assert len(content) == 1
         assert content[0]['id']  # the task failed
@@ -112,20 +121,26 @@ def test_simpleindex_does_fails_invalid_field(
     celery_app_with_context,
     celery_session_worker,
     create_records,
+    tmpdir,
 ):
+    log_path = str(tmpdir)
+    invalid_field = {
+        'preprint_date': 'i am not a date'
+    }
+
     with patch('inspirehep.modules.records.receivers.InspireRecordIndexer'):
-        create_records(additional_props={'preprint_date': 'i am not a date'})
+        create_records(additional_props=invalid_field)
 
     result = super_app_cli.invoke(
         simpleindex,
-        ['--yes-i-know', '-t', 'lit', '--queue-name', ''],
+        ['--yes-i-know', '-t', 'lit', '--queue-name', '', '-l', log_path],
     )
     assert result.exit_code == 0
     assert '0 succeeded' in result.output_bytes
     assert '0 failed' in result.output_bytes
     assert '1 batches errored' in result.output_bytes
 
-    with open('/tmp/inspire/records_index_errors.log') as log_file:
+    with open(os.path.join(log_path, 'records_index_errors.log')) as log_file:
         content = json.loads(log_file.read())
         assert len(content) == 1
         assert content[0]['ids']  # the task failed
@@ -138,14 +153,20 @@ def test_simpleindex_does_one_fails_and_two_ok(
     celery_app_with_context,
     celery_session_worker,
     create_records,
+    tmpdir,
 ):
+    log_path = str(tmpdir)
+    invalid_field = {
+        'preprint_date': 'i am not a date'
+    }
+
     create_records(n=2)
     with patch('inspirehep.modules.records.receivers.InspireRecordIndexer'):
-        create_records(additional_props={'preprint_date': 'i am not a date'})
+        create_records(additional_props=invalid_field)
 
     result = super_app_cli.invoke(
         simpleindex,
-        ['--yes-i-know', '-t', 'lit', '--queue-name', ''],
+        ['--yes-i-know', '-t', 'lit', '--queue-name', '', '-l', log_path],
     )
     # this fails because right now the whole batch fails
     assert result.exit_code == 0
@@ -153,7 +174,7 @@ def test_simpleindex_does_one_fails_and_two_ok(
     assert '1 failed' in result.output_bytes
     assert '0 batches errored' in result.output_bytes
 
-    with open('/tmp/inspire/records_index_errors.log') as log_file:
+    with open(os.path.join(log_path, 'records_index_errors.log')) as log_file:
         content = json.loads(log_file.read())
         assert len(content) == 1
         assert content[0]['ids']  # the task failed
@@ -208,3 +229,73 @@ def test_simpleindex_only_authors(
     assert result.exit_code == 0
     assert '2 succeeded' in result.output_bytes
     assert '0 failed' in result.output_bytes
+
+
+def _get_deleted_records_by_uuids(uuids):
+    records = RecordMetadata.query.filter(RecordMetadata.id.in_(uuids)).all()
+    return [r for r in records if r.json.get('deleted')]
+
+
+def test_get_query_records_to_index_ok_different_pids(
+    super_app,
+    create_records
+):
+    create_records(n=2)
+    create_records(n=2, pid_type='job')
+    create_records(n=2, pid_type='ins')
+
+    pids = ['lit', 'con', 'exp', 'jou', 'aut', 'job', 'ins']
+    query = get_query_records_to_index(pids)
+
+    expected_count = 6
+    result_count = query.count()
+    assert result_count == expected_count
+
+    uuids = [str(item[0]) for item in query.all()]
+    deleted_records = _get_deleted_records_by_uuids(uuids)
+    assert deleted_records == []
+
+
+def test_get_query_records_to_index_only_lit(super_app, create_records):
+    create_records(n=2)
+    create_records(n=2, pid_type='aut')
+
+    pids = ['lit']
+    query = get_query_records_to_index(pids)
+
+    expected_count = 2
+    result_count = query.count()
+    assert result_count == expected_count
+
+    uuids = [str(item[0]) for item in query.all()]
+    deleted_records = _get_deleted_records_by_uuids(uuids)
+    assert deleted_records == []
+
+
+def test_get_query_records_to_index_only_lit_adding_record(
+    super_app,
+    create_records
+):
+    create_records(additional_props={'deleted': True})
+
+    pids = ['lit']
+    query = get_query_records_to_index(pids)
+
+    expected_count = 0  # does not take deleted record
+    result_count = query.count()
+    assert result_count == expected_count
+
+
+def test_get_query_records_to_index_only_lit_adding_record_deleted(
+    super_app,
+    create_records,
+):
+    create_records()
+    create_records(additional_props={'deleted': True})
+
+    pids = ['lit']
+    query = get_query_records_to_index(pids)
+
+    expected_count = 1
+    result_count = query.count()
+    assert result_count == expected_count
