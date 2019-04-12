@@ -1,0 +1,30 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.21.0]
+    method: GET
+    uri: http://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:1234&metadataPrefix=arXiv
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA42RXU/CMBSG7/kVzbnxams3IOqyjpjgVwJKFBPilXU9QBPWzray/Xy7gYnEG5Je
+        tc/7cU7zSVvtyB6tU0ZzSGIGBHVppNIbDm/Lu+gKJsUgf755jBbzBxJo7Thsva8zSpumiU2NWthy
+        q/boYmM3NKA0jRmFA5y1Tp0ImmGPpYwldDWfvZZbrESktPNClxhUTmWuv5yZUvi+1zl55BzoOEfc
+        OglhLIuuNtrhVHgsUpZcR2wUJemSXWbjcTjvOT1BOsXXNzrfreyTwz36FyyNlUCURO3VWqHlYITK
+        hF2pfZedJelwBKRCL6TwYmFxrVoO/TsUx9LY1sb6WNj2IKLBIu3C+7SQi9YaS8LHIAclpwbdk/G3
+        rXIeirnYrY2tUP4pQT7+l7jIaW8T7H4XUQx+ACdr1oUCAgAA
+    headers:
+      connection: [Keep-Alive]
+      content-encoding: [gzip]
+      content-length: ['321']
+      content-type: [text/xml]
+      date: ['Fri, 12 Apr 2019 07:55:53 GMT']
+      keep-alive: ['timeout=5, max=100']
+      server: [Apache]
+      vary: ['Accept-Encoding,User-Agent']
+    status: {code: 200, message: OK}
+version: 1

@@ -1,0 +1,43 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.21.0]
+    method: GET
+    uri: http://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:0804.2273&metadataPrefix=arXiv
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA7VWTXPbNhC981fs8NBpZyyCkj2Nq0LMeJK0cUeOPZZTZ3oDwRWJhiRYAPrKr++C
+        FEU5lWd06cUGwMXb9xYPC/G326qENRqrdD0Lx1EcAtZSZ6rOZ+Hnp99G1+HbJOD3N7ejh7uPQNG1
+        nYWFc82Usc1mE+kGa2FkodZoI21yRqFsEsUs7IKnW6tebNhctmGTOB6zL3fzhSywEiNVWydqibTL
+        qqltF+daCtfyOicfnBO01xFtbRaSLIO20bXF98JhMonHv4ziq9F48hS/mV7F0/H4L85ehPgd/6zQ
+        Ol+ydBb+ju4RpTZZCCrD2qmlQjMLtVBTYb6otc89ja/jq2gyeXMZQoVOZMKJB4NLtZ2FbVCY7Jnj
+        ttHGRcJsu52McCaeQZuSkh/StUT2gwJFhiYJgA8UklcYcHYUQzuICyGLqiHx8XUr/mfOhlUKsegW
+        DcpEWs76ccBZn5X3knxsm/E7jwxq/Bm0Ef+HNU6lgde/7Q3ga5a8qE7CpUHSnw0VueKsX+Ni5Qpt
+        bD9I+Ffc1aLCZC5y/Q056+d8qQ36kU3eCVNyNsw56zd/D/KnqCFDWOiqwfIk1keyHRp3HtwnLK2u
+        T+LcKVkILGEenQf1LEyN5iTUQlXos5wDsxA1ueY1Uo/6fG1/6IJs8QrQAzo8DcMOB+iUKzG5T/9G
+        6eARR58twg/k+V/hw5ZqU+c4hRv6YPXKSBy9o2tjlISbpjFayIKzDoCTDzHXRlEaaaP3c6C/n27J
+        MsM6F7IayVJY8kI0ichnwwIvlURqL30PaJ1GbUvqqqK207p2H2JZumOX1MR4v0LIqXVGSJcAPBUI
+        5G84SFqRIqr3QQ/86Lvf/eOHn2BpqC4bbb4CtRFhnQVXYGCw0VY5bXYjuZdba3/LQC8hU7lyogTd
+        wTsNAlK9ovPMQOS5wVz0oc+YElZXOBvBbU3oykIlavLQxQGpVKkRZgdS147SgQ+hIwNF09z4+wYb
+        5YqWGkFC29AdJV8ZvGiV0ReD6a7bJiRlsyot0ZNrNzQNFaqlZdt4WSpKZKPgyfPJkeiIUn2jRINO
+        uoLHclwhWmaKhNKj4runjxpKFXj6QtWV/0Jjcl21FyJLbbHcdSq6DB4IcCGJh+xOhyaFLoWxhWou
+        go1XdFyRTNEBq3TlqyGk0ZawV6VTDcm0aNZkhE6b78GpsL7gzwhk0jW1+kAQE7JTp4Wo+ZLB3gY+
+        yJ/lBalZK9zQnP7rlW1PwNAbakSqSuV2gEva6+xFkKGVRAchM2LpwKNYehHoQTmus6+OoTrVPkWl
+        LP2YoDVLvC1ZT1eA1BJ3Ab13aJQv3HGty3LlPe3ICJWXQcL/w6dL4g0+ODPonEmnS/ervxa8a/f+
+        xRoeKv+k7h9Pdvyk9r8OkuBf8ntXLBcJAAA=
+    headers:
+      connection: [Keep-Alive]
+      content-encoding: [gzip]
+      content-length: ['1052']
+      content-type: [text/xml]
+      date: ['Fri, 12 Apr 2019 07:40:10 GMT']
+      keep-alive: ['timeout=5, max=100']
+      server: [Apache]
+      vary: ['Accept-Encoding,User-Agent']
+    status: {code: 200, message: OK}
+version: 1

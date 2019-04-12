@@ -235,6 +235,7 @@ setup(
             'requirejs = inspirehep.modules.theme.bundles:requirejs',
         ],
         'invenio_base.api_apps': [
+            'inspire_importer = inspirehep.modules.importer.ext:InspireImporter',
             'inspire_records = inspirehep.modules.records.ext:InspireRecords',
             'inspire_search = inspirehep.modules.search:InspireSearch',
             'inspire_accounts = inspirehep.modules.accounts:InspireAccounts',
@@ -254,6 +255,7 @@ setup(
             'inspire_disambiguation = inspirehep.modules.disambiguation:InspireDisambiguation',
             'inspire_fixtures = inspirehep.modules.fixtures:InspireFixtures',
             'inspire_forms = inspirehep.modules.forms:InspireForms',
+            'inspire_importer = inspirehep.modules.importer.ext:InspireImporter',
             'inspire_literaturesuggest = inspirehep.modules.literaturesuggest:InspireLiteratureSuggest',
             'inspire_migrator = inspirehep.modules.migrator:InspireMigrator',
             'inspire_orcid = inspirehep.modules.orcid:InspireOrcid',
